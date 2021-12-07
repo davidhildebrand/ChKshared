@@ -160,7 +160,7 @@ S.PnltCurrent.row = 3;      S.PnltCurrent.column = 1;
             S.PnltCurrent.column = S.PnltCurrent.column + 1;  
         WP.text = 	{   ['Cam shutter: [', sprintf('%4.2f ', Xin.D.Sys.PointGreyCam(N).ShutterRange), '] (ms)']};
         WP.tip =    {   ['Cam shutter: [', sprintf('%4.2f ', Xin.D.Sys.PointGreyCam(N).ShutterRange), '] (ms)']};
-        WP.inputValue =     Xin.D.Sys.PointGreyCam(N).Shutter;
+        WP.inputValue =     Xin.D.Sys.PointGreyCam(N).ShutterTarget;
         WP.inputRange =     Xin.D.Sys.PointGreyCam(N).ShutterRange;
         WP.inputSlideStep=  [0.01 0.1];
         Panelette(S, WP, 'Xin');

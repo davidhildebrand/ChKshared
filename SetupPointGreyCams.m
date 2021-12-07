@@ -23,17 +23,30 @@ while pass == 0
         for j = 1:length(Xin.D.Sys.PointGreyCam) 
             if strcmp(  Xin.D.Sys.PointGreyCam(j).DeviceName,	info.DeviceInfo(i).DeviceName) && ...
                strcmp(  Xin.D.Sys.PointGreyCam(j).SerialNumber,	info.hSrc.SerialNumber)
+                Xin.D.Sys.PointGreyCam(j).Located = i;   
+                
                 Xin.D.Sys.PointGreyCam(j).Located = i;    
                 info.pSrc = propinfo(info.hSrc); 
                 info.CurShutterLimit = info.pSrc.Shutter.ConstraintValue(2) - Xin.D.Sys.PointGreyCam(j).ShutterResv; 
+                
                 if abs(info.CurShutterLimit/Xin.D.Sys.PointGreyCam(j).ShutterTarget -1) >0.08
-                    pass = pass*0;
+                    %pass = pass*0; %SOC
+
+                    disp(strcat('Camera # ', int2str(i), ': verify configuration. -- ',info.DeviceInfo(i).DeviceName,' - ', Xin.D.Sys.PointGreyCam(j).Comments))
+                    disp(strcat('Shutter limit is: ', num2str(info.pSrc.Shutter.ConstraintValue(2))));
+                    disp(strcat('Shutter target is: ', num2str(Xin.D.Sys.PointGreyCam(j).ShutterTarget)));
+                        %disp(strcat('Camera shutter limit is  ', num2str(info.CurShutterLimit),'. Change SetupD(i=', num2str(j),') to this value'))
+                else
+                    disp(strcat('Camera # ', int2str(i),' OK. --  ',info.DeviceInfo(i).DeviceName,' -  ', Xin.D.Sys.PointGreyCam(j).Comments))
+                    %disp(strcat('Shutter limit is: ', num2str(temp_pSrc.Shutter.ConstraintValue(2))));
+                    %disp(strcat('Shutter target is: ', num2str(Xin.D.Sys.PointGreyCam(j).ShutterTarget)));
+                    
                 end
             end     
         end
         delete(info.hVid);
     end
-    if resettime > 10
+    if resettime > 3
         disp('cannot get the shutter right')
         pass = 1;
     end
@@ -105,9 +118,11 @@ for i = 1:length(Xin.D.Sys.PointGreyCam)
         %% Variable Settings for Individual Cameras
             Xin.HW.PointGrey.Cam(i).hSrc.FrameRate =	Xin.D.Sys.PointGreyCam(i).FrameRate;
         pause(1.0);
-        pSrc = propinfo(Xin.HW.PointGrey.Cam(i).hSrc); 
+        pSrc = propinfo(Xin.HW.PointGrey.Cam(i).hSrc);
+                
         Xin.D.Sys.PointGreyCam(i).Shutter =             pSrc.Shutter.ConstraintValue(2) - ...
-                                                        Xin.D.Sys.PointGreyCam(i).ShutterResv;                                                    
+                                                            Xin.D.Sys.PointGreyCam(i).ShutterResv; 
+                                                        
         Xin.D.Sys.PointGreyCam(i).ShutterRange =        [pSrc.Shutter.ConstraintValue(1) Xin.D.Sys.PointGreyCam(i).Shutter];
             Xin.HW.PointGrey.Cam(i).hSrc.Shutter =      Xin.D.Sys.PointGreyCam(i).Shutter;        
         
@@ -163,7 +178,7 @@ for i = 1:length(Xin.D.Sys.PointGreyCam)
         Xin.D.Sys.PointGreyCam(i).PreviewStrFR =        [num2str(Xin.D.Sys.PointGreyCam(i).FrameRate) '.00 FPS'];
         Xin.D.Sys.PointGreyCam(i).PreviewStrTS =        '00:00:00.0';
         Xin.D.Sys.PointGreyCam(i).DispPeriod =          0.1;
-        Xin.D.Sys.PointGreyCam(i).DispTimer =           second(now); 
+        Xin.D.Sys.PointGreyCam(i).DispTimer =           now *86400; 
        
         %% process display image: .Zoom, Gain, Rotate, ROI        
         % ZOOM in
@@ -216,7 +231,9 @@ for i = 1:length(Xin.D.Sys.PointGreyCam)
             Xin.D.Sys.PointGreyCam(i).DispHistMean =	uint8(mean(Xin.D.Sys.PointGreyCam(i).DispImg,2)); 
             Xin.D.Sys.PointGreyCam(i).DispHistMin =     min(Xin.D.Sys.PointGreyCam(i).DispImg, [], 2);
         end
-
+     
+        
+        
     else
         errordlg(['PointGrey cameras #', num2str(i),' "', Xin.D.Sys.PointGreyCam(i).Comments, '" cannot be located']);        
     end

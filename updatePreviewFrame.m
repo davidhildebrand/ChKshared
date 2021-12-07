@@ -3,16 +3,16 @@ function updatePreviewFrame(obj,event,~)
 
 global Xin
 
-tnow = now;
+tnow = now *86400;
 I = obj.UserData;
 i = str2double(I(5));
 
-if  second(tnow -   Xin.D.Sys.PointGreyCam(i).DispTimer) < ...
+if  tnow -   Xin.D.Sys.PointGreyCam(i).DispTimer < ...
                     Xin.D.Sys.PointGreyCam(i).DispPeriod	% wihtin 1x preview time
                         % Escape and do nothing
 else
     %% Update PrevTimer
-    if  second(tnow-Xin.D.Sys.PointGreyCam(i).DispTimer) < ...
+    if  tnow-Xin.D.Sys.PointGreyCam(i).DispTimer < ...
             2*      Xin.D.Sys.PointGreyCam(i).DispPeriod	% within 1-2x preview time
         Xin.D.Sys.PointGreyCam(i).DispTimer = addtodate(...
             Xin.D.Sys.PointGreyCam(i).DispTimer, ...

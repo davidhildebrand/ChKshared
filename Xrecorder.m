@@ -68,7 +68,7 @@ rec.NIDAQ_OptionNum =       1;
 rec.NIDAQ_SR =              100e3;
 rec.NIDAQ_UR =              10;
 
-rec.NIDAQ_Options(1).Dev.devName =      'Dev3';
+rec.NIDAQ_Options(1).Dev.devName =      'Dev1';
 rec.NIDAQ_Options(1).CO.chanIDs = 		0;
 rec.NIDAQ_Options(1).AI.chanIDs =		2;
 % rec.NIDAQ_Options(1).AI.chanIDs =		16;
