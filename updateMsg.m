@@ -1,8 +1,12 @@
 function updateMsg(hLogFile, msg)
-global Xin TP
-
 try
-    fprintf(hLogFile, msg);
+    if hLogFile == -1
+        disp(['Could not write to log file: ' msg])
+    elseif isnan(hLogFile)
+        fprintf([strrep(strrep(msg,'\n',''),'\r',''), '\n']);
+    else
+        fprintf(hLogFile, msg);
+    end
 catch
-    disp(msg);
+    disp(['Really could not write to log file: ' msg])
 end

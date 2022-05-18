@@ -84,5 +84,5 @@ str = [MainVarStr, '.HW.Thorlabs.PM100 = O.PM100;'];            eval(str);
 str = [MainVarStr, '.D.Sys.PowerMeter = I.PowerMeter;'];        eval(str);
 
 %% LOG MSG
-msg = [datestr(now, 'yy/mm/dd HH:MM:SS.FFF') '\tSetupThorlabsPowerMeters\tSetup Thorlabs Power Meters\r\n'];
+msg = [datestr(now, 'yyyy-mm-dd HH:MM:SS.FFF') '\tSetupThorlabsPowerMeters\tSetup Thorlabs Power Meters\r\n'];
 str = ['updateMsg(', MainVarStr, '.D.Exp.hLog, msg);'];         eval(str);

@@ -15,29 +15,28 @@ global TP Xin
 figure('Visible',   'off');
 drawnow;
     str = [MainVarStr, '.HW.TDT.PA5 = actxcontrol(''PA5.x'',[0 0 1 1]);']; 
+        %disp(str);
         eval(str);
-%     disp(str);
     pause(0.2);
-    str = ['con = invoke(', MainVarStr, '.HW.TDT.PA5,''ConnectPA5'',''USB'',1);'];
+    str = ['con = invoke(', MainVarStr, '.HW.TDT.PA5,''ConnectPA5'',''GB'',1);'];
+        %disp(str);
         eval(str);
-%     disp(str);
-%     disp(con);
-%     disp(Xin.HW.TDT.PA5);
-    if con ~=1
+        %disp(con);
+        %disp(Xin.HW.TDT.PA5);
+    if con ~= 1
         errordlg({...
             'PA5 connection is not successful.',...
             'Check the TDT PA5 rack power, or ',...
             'zBusmon can be used to validate if',...
             'PA5 is ready to be called from ActiveX or not'});
     end
-    str = [MainVarStr, '.HW.TDT.PA5.Display(''ChK, Go!'', 0);'];
+    str = [MainVarStr, '.HW.TDT.PA5.Display(''...'', 0);'];
         eval(str);
     
 %% LOG MSG
-msg = [datestr(now, 'yy/mm/dd HH:MM:SS.FFF') '\tSetupTDTSys3PA5\tSetup TDT Sys3 PA5\r\n'];  
+msg = [datestr(now, 'yyyy-mm-dd HH:MM:SS.FFF') '\tSetupTDTSys3PA5\tSetup TDT Sys3 PA5\r\n'];  
 str = ['updateMsg(', MainVarStr, '.D.Exp.hLog, msg);'];
 eval(str);
-
 
 %     Xin.HW.TDT.PA5 = actxcontrol('PA5.x',[0 0 1 1]);
 %     con = invoke(Xin.HW.TDT.PA5,'ConnectPA5','USB',1);

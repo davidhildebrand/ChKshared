@@ -1,6 +1,8 @@
 function varargout = CtrlPointGreyCams(varargin)
 % This is the control part of pointgrey cameras
- 
+
+warning('off','images:imshow:reducingImage');
+
 %% For Standarized SubFunction Callback Control
 if nargin==0                % INITIATION
     InitializeTASKS
@@ -37,9 +39,9 @@ set(Xin.UI.FigPGC(N).CP.hSys_CamDispGain_PotenEdit,     'Callback',	[mfilename, 
 set(Xin.UI.FigPGC(N).CP.hExp_RefImage_Momentary,        'Callback',	[mfilename, '(''Ref_Image'')']);
 set(Xin.UI.FigPGC(N).CP.hMon_PreviewSwitch_Rocker,	'SelectionChangeFcn',	[mfilename, '(''Preview_Switch'')']);
 	%% LOG MSG
-    msg = [datestr(now, 'yy/mm/dd HH:MM:SS.FFF') '\tInitializeCallbacks\tSetup the PointGrey Camera #' ...
+    msg = [datestr(now, 'yyyy-mm-dd HH:MM:SS.FFF') '\tInitializeCallbacks\tSetup the PointGrey Camera #' ...
         num2str(N), '''s GUI Callbacks\r\n'];
-    updateMsg(Xin.D.Exp.hLog, msg);
+    updateMsg(Xin.D.Sys.hLog, msg);
     
 function Cam_Shutter(varargin)
     global Xin
@@ -72,9 +74,9 @@ function Cam_Shutter(varargin)
     set(Xin.UI.FigPGC(N).CP.hSys_CamShutter_PotenSlider,	'value',	Shutter);    
     set(Xin.UI.FigPGC(N).CP.hSys_CamShutter_PotenEdit,      'string',   s);
 	%% LOG MSG
-    msg = [datestr(now, 'yy/mm/dd HH:MM:SS.FFF') '\tCam_Shutter\tSetup the PointGrey Camera #' ...
+    msg = [datestr(now, 'yyyy-mm-dd HH:MM:SS.FFF') '\tCam_Shutter\tSetup the PointGrey Camera #' ...
         num2str(N), '''s Shutter as: ' s ' (ms)\r\n'];
-    updateMsg(Xin.D.Exp.hLog, msg);
+    updateMsg(Xin.D.Sys.hLog, msg);
     
 function Cam_Gain(varargin)
     global Xin
@@ -108,9 +110,9 @@ function Cam_Gain(varargin)
     set(Xin.UI.FigPGC(N).CP.hSys_CamGain_PotenSlider,	'value',	Gain);    
     set(Xin.UI.FigPGC(N).CP.hSys_CamGain_PotenEdit, 	'string',   s);
   	%% LOG MSG
-    msg = [datestr(now, 'yy/mm/dd HH:MM:SS.FFF') '\tCam_Gain\tSetup the PointGrey Camera #' ...
+    msg = [datestr(now, 'yyyy-mm-dd HH:MM:SS.FFF') '\tCam_Gain\tSetup the PointGrey Camera #' ...
         num2str(N), '''s gain as: ' s ' (dB)\r\n'];
-    updateMsg(Xin.D.Exp.hLog, msg);
+    updateMsg(Xin.D.Sys.hLog, msg);
     
 function Cam_DispGain(varargin)
     global Xin
@@ -142,9 +144,9 @@ function Cam_DispGain(varargin)
     set(Xin.UI.FigPGC(N).CP.hSys_CamDispGain_PotenSlider,	'value',	Xin.D.Sys.PointGreyCam(N).DispGainBit);    
     set(Xin.UI.FigPGC(N).CP.hSys_CamDispGain_PotenEdit,	'string',   s);   
     %% LOG MSG
-    msg = [datestr(now, 'yy/mm/dd HH:MM:SS.FFF') '\tDisp_Gain\tSetup the PointGrey Camera #' ...
+    msg = [datestr(now, 'yyyy-mm-dd HH:MM:SS.FFF') '\tDisp_Gain\tSetup the PointGrey Camera #' ...
         num2str(N), '''s DISP gain as: ' s '\r\n'];
-    updateMsg(Xin.D.Exp.hLog, msg);
+    updateMsg(Xin.D.Sys.hLog, msg);
     
 function Preview_Switch(varargin)
     global Xin
@@ -194,9 +196,9 @@ function Preview_Switch(varargin)
         end
     end
     %% LOG MSG
-    msg = [datestr(now, 'yy/mm/dd HH:MM:SS.FFF') '\tMon_PreviewSwitch\tPointGrey Camera #' ...
+    msg = [datestr(now, 'yyyy-mm-dd HH:MM:SS.FFF') '\tMon_PreviewSwitch\tPointGrey Camera #' ...
         num2str(N), ' switched to ', val, '\r\n'];
-    updateMsg(Xin.D.Exp.hLog, msg);
+    updateMsg(Xin.D.Sys.hLog, msg);
     
 function Ref_Image(varargin)
     global Xin
@@ -243,7 +245,7 @@ function Ref_Image(varargin)
                 }];  
             TriggerRepeat =             Xin.D.Sys.PointGreyCam(N).DispGainNum*2^(16-12) - 1;
             DataBit =                   16;           
-            DataNumApp =                ['_',...
+            DataNumApp =                ['_Reference_',...
                                         Xin.D.Sys.Light.Source,  '_',...
                                         Xin.D.Sys.Light.Port,    '_',...
                                         Xin.D.Sys.Light.HeadCube];      
@@ -300,24 +302,24 @@ function Ref_Image(varargin)
         Xin.D.Sys.PointGreyCam(N).RefImage = uint16(RefImage);        
     end
     %% Save the Image
-    datestrfull =	datestr(now, 30);
-    dataname =      [datestrfull(3:end), DataNumApp];    
+    datestrfull =	[datestr(now, 'yyyymmdd'), 'd', datestr(now, 'HHMMSS'), 't'];
+    dataname =      [datestrfull, DataNumApp];
     figure(...
         'Name',             dataname,...
         'NumberTitle',      'off',...
         'Color',            Xin.UI.C.BG,...
         'MenuBar',          'none',...
         'DoubleBuffer',     'off');
-    imshow(Xin.D.Sys.PointGreyCam(N).RefImage);
+    imshow(Xin.D.Sys.PointGreyCam(N).RefImage, 'InitialMagnification','fit');
     box on
     imagedescription = strjoin(imageinfo);
-    imwrite(Xin.D.Sys.PointGreyCam(N).RefImage, [Xin.D.Exp.DataDir, dataname, '.tif'],...
+    imwrite(Xin.D.Sys.PointGreyCam(N).RefImage, [Xin.D.Exp.DataDir, dataname, '.png'],...
         'Compression',          'deflate',...
         'Description',          imagedescription);
     %% LOG MSG    
-    msg = [datestr(now, 'yy/mm/dd HH:MM:SS.FFF') '\tRef_Image\tA reference image has been taken from PointGrey Camera #'...
+    msg = [datestr(now, 'yyyy-mm-dd HH:MM:SS.FFF') '\tRef_Image\tReference image taken from PointGrey Camera #'...
         num2str(N), ':', Xin.D.Sys.PointGreyCam(N).Comments,'\r\n'];
-    updateMsg(Xin.D.Exp.hLog, msg);
+    updateMsg(Xin.D.Sys.hLog, msg);
     
 function Trigger_Mode(varargin)
     global Xin    
@@ -353,7 +355,7 @@ function Trigger_Mode(varargin)
         Xin.D.Sys.PointGreyCam(N).TriggerCondition,...
         Xin.D.Sys.PointGreyCam(N).TriggerSource);     
     %% LOG MSG    
-    msg = [datestr(now, 'yy/mm/dd HH:MM:SS.FFF') '\tTrigger_Mode\tSetup the PointGrey Camera #' ...
+    msg = [datestr(now, 'yyyy-mm-dd HH:MM:SS.FFF') '\tTrigger_Mode\tSetup the PointGrey Camera #' ...
         num2str(N), '''s Trigger mode selected as: "' ...
          Xin.D.Sys.PointGreyCam(N).TriggerName '"\r\n'];
-    updateMsg(Xin.D.Exp.hLog, msg);
+    updateMsg(Xin.D.Sys.hLog, msg);

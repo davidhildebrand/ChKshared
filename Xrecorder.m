@@ -68,7 +68,7 @@ rec.NIDAQ_OptionNum =       1;
 rec.NIDAQ_SR =              100e3;
 rec.NIDAQ_UR =              10;
 
-rec.NIDAQ_Options(1).Dev.devName =      'Dev1';
+rec.NIDAQ_Options(1).Dev.devName =      'Intrinsic_PCIe6323';
 rec.NIDAQ_Options(1).CO.chanIDs = 		0;
 rec.NIDAQ_Options(1).AI.chanIDs =		2;
 % rec.NIDAQ_Options(1).AI.chanIDs =		16;
@@ -336,7 +336,7 @@ function GUI_Edit(varargin)
         otherwise
     end
 	%% MSG LOG
-    msg = [datestr(now, 'yy/mm/dd HH:MM:SS.FFF') '\tGUI_Edit\t' tag ' updated to ' s '\r\n'];
+    msg = [datestr(now, 'yyyy-mm-dd HH:MM:SS.FFF') '\tGUI_Edit\t' tag ' updated to ' s '\r\n'];
     disp(msg);
 
 function GUI_Rocker(varargin)
@@ -430,7 +430,7 @@ function GUI_Rocker(varargin)
         otherwise
             errordlg('Rocker tag unrecognizable!');
     end
-	msg = [datestr(now, 'yy/mm/dd HH:MM:SS.FFF'),'\GUI_Rocker\',label,' selected as ',val,'\r\n'];
+	msg = [datestr(now, 'yyyy-mm-dd HH:MM:SS.FFF'),'\GUI_Rocker\',label,' selected as ',val,'\r\n'];
     disp(msg);
         
 function GUI_Toggle(varargin)
@@ -475,7 +475,7 @@ function GUI_Toggle(varargin)
         otherwise
             errordlg('Toggle tag unrecognizable!');
     end
-	msg = [datestr(now, 'yy/mm/dd HH:MM:SS.FFF'),'\GUI_Toggle\',label,' selected as ',val,'\r\n'];
+	msg = [datestr(now, 'yyyy-mm-dd HH:MM:SS.FFF'),'\GUI_Toggle\',label,' selected as ',val,'\r\n'];
     disp(msg);
         
 function RecordStart
